@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Cliente extends Usuario{
 
@@ -8,8 +9,5 @@ public class Cliente extends Usuario{
         super(nome, sobrenome, dataNascimento, senha);
     }
 
-    public void cadastrar() throws Exception {
-        super.realizarCadastro(18); // Regra para clientes
-    }
 
 }

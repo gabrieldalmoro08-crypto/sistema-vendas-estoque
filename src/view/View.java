@@ -10,7 +10,7 @@ public class View {
     public int menuUsuario(){
         String menu = "------- MENU DE OPÇÕES! -------\n"
                     + "\n1 Realizar cadastro: "
-                    + "\n2 Fazer login: "
+                    + "\n2 Login: "
                     + "\n3 Escolha uma opção ";
 
         System.out.println(menu);

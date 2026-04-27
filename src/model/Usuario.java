@@ -24,9 +24,9 @@ public abstract class Usuario {
         return idadeCalculada >= idadeMinima;
     }
 
-    public void realizarCadastro(int idadeMinimaPermitida) throws Exception {
+    public void validarCadastro (int idadeMinimaPermitida) {
         if (!verificarMaioridade(idadeMinimaPermitida)) {
-            throw new Exception("Acesso Negado: Idade mínima de " + idadeMinimaPermitida + " anos não atingida.");
+            throw new RuntimeException("Acesso Negado: Idade mínima de " + idadeMinimaPermitida + " anos não atingida.");
         }
         System.out.println("Cadastro validado com sucesso para: " + this.nome);
     }
