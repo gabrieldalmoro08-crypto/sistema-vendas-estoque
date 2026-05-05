@@ -9,12 +9,14 @@ public abstract class Usuario {
     protected String sobrenome;
     protected LocalDate dataNascimento;
     protected String senha;
+    protected String CPF;
 
-    public Usuario(String nome, String sobrenome, LocalDate dataNascimento, String senha) {
+    public Usuario(String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.dataNascimento = dataNascimento;
         this.senha = senha;
+        this.CPF = CPF;
     }
 
     public boolean verificarMaioridade(int idadeMinima) {
@@ -61,5 +63,13 @@ public abstract class Usuario {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public String getCPF() {
+        return CPF;
+    }
+
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
     }
 }

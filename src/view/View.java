@@ -1,6 +1,4 @@
 package view;
-import controller.Controller;
-import model.*;
 import java.util.Scanner;
 
 public class View {
