@@ -7,8 +7,7 @@ public class Administrador extends Usuario {
 
     private static final int IDADE_MINIMA = 18;
 
-    public Administrador(String nome, String sobrenome, LocalDate dataNascimento, String senha) {
-        super(nome, sobrenome, dataNascimento, senha);
+    public Administrador(String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
+        super(nome, sobrenome, dataNascimento, senha, CPF);
     }
-
 }

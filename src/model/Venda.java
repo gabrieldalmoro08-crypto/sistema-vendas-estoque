@@ -1,41 +1,46 @@
 package model;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Venda {
+    private LocalDate dataVenda;
+    private Cliente cliente;
+    private List<ItemVenda> itens;
 
-    private int id;
-    private double preco;
-    private int qtde;
-
-    public Venda(int id, double preco, int qtde) {
-        this.id = id;
-        this.preco = preco;
-        this.qtde = qtde;
+    public Venda(Cliente cliente) {
+        this.dataVenda = LocalDate.now();
+        this.cliente = cliente;
+        this.itens = new ArrayList<>(); // Inicializa a lista vazia
     }
 
-
-
-
-    public int getId() {
-        return id;
+    public void adcionarItem(Produto produto, int quantidade){
+        ItemVenda itemVenda = new ItemVenda(produto, quantidade);
+        this.itens.add(itemVenda);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public LocalDate getDataVenda() {
+        return dataVenda;
     }
 
-    public double getPreco() {
-        return preco;
+    public void setDataVenda(LocalDate dataVenda) {
+        this.dataVenda = dataVenda;
     }
 
-    public void setPreco(double preco) {
-        this.preco = preco;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public int getQtde() {
-        return qtde;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public void setQtde(int qtde) {
-        this.qtde = qtde;
+    public List<ItemVenda> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<ItemVenda> itens) {
+        this.itens = itens;
     }
 }

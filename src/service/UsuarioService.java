@@ -23,4 +23,16 @@ public class UsuarioService {
         return usuarioEncontrado;
     }
 
+    public Usuario alterarSenha(Usuario usuario, String senhaAntiga, String novaSenha) {
+
+
+
+        return null;
+    }
+
+    public Usuario inativarConta(Usuario usuario) {
+
+        return null;
+    }
+
 }
