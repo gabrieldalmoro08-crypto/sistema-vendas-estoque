@@ -5,13 +5,15 @@ import java.time.Period;
 
 public abstract class Usuario {
 
+    private int id;
     protected String nome;
     protected String sobrenome;
     protected LocalDate dataNascimento;
     protected String senha;
     protected String CPF;
 
-    public Usuario(String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
+    public Usuario(int id, String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
+        this.id = id;
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.dataNascimento = dataNascimento;
@@ -31,6 +33,14 @@ public abstract class Usuario {
             throw new RuntimeException("Acesso Negado: Idade mínima de " + idadeMinimaPermitida + " anos não atingida.");
         }
         System.out.println("Cadastro validado com sucesso para: " + this.nome);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getSenha() {

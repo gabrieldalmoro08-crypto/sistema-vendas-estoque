@@ -5,7 +5,7 @@ import java.time.Period;
 
 public class Cliente extends Usuario{
 
-    public Cliente(String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
-        super(nome, sobrenome, dataNascimento, senha, CPF);
+    public Cliente(int id, String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
+        super(id, nome, sobrenome, dataNascimento, senha, CPF);
     }
 }

@@ -22,7 +22,7 @@ public class Produto {
         return true;
     }
 
-    public boolean validacaoPreco(int preco){
+    public boolean validacaoPreco(double preco){
         if (preco <= 0){
             return false;
         }
