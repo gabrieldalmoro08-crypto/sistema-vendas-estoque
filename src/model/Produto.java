@@ -15,6 +15,9 @@ public class Produto {
         this.descricao = descricao;
     }
 
+    public Produto() {
+    }
+
     public boolean validacaoDescricao(String descricao){
         if (descricao == null){
             return false;
