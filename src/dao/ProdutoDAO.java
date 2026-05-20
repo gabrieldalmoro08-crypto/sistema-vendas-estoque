@@ -79,7 +79,7 @@ public class ProdutoDAO {
         }
     }
 
-        public List<Produto> listarTodosProdutos() {
+    public List<Produto> listarTodosProdutos() {
 
             List<Produto> listaTodosProdutos = new ArrayList<>();
 
@@ -107,5 +107,31 @@ public class ProdutoDAO {
             return listaTodosProdutos;
         }
 
+    public Produto buscarProdutoPorId(int id) {
 
+        Produto produtoEncontrado = null;
+
+        String sql = "SELECT * FROM produto WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1,id);
+
+            try (ResultSet rs = stmt.executeQuery()){
+
+                if(rs.next()){
+                    produtoEncontrado = new Produto();
+                    produtoEncontrado.setId(rs.getInt("id"));
+                    produtoEncontrado.setPreco(rs.getDouble("preco"));
+                    produtoEncontrado.setQtde(rs.getInt("qtde"));
+                    produtoEncontrado.setDescricao(rs.getString("descricao"));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro crítico ao buscar o id produto: " + e.getMessage(), e);
+        }
+        return produtoEncontrado;
+    }
 }
