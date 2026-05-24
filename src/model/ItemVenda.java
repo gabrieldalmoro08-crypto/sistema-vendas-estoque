@@ -4,12 +4,12 @@ public class ItemVenda {
 
     private Produto produto;
     private int quantidade;
-    private double precoUnitario; // Preço no momento da venda
+    private double precoUnitario;
 
     public ItemVenda(Produto produto, int quantidade) {
         this.produto = produto;
         this.quantidade = quantidade;
-        this.precoUnitario = produto.getPreco(); //Momento que congela o preço atual do produto na hora da venda
+        this.precoUnitario = produto.getPreco();
     }
 
     public double subTotal(){

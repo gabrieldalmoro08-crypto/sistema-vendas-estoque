@@ -12,7 +12,7 @@ public class Venda {
     public Venda(Cliente cliente) {
         this.dataVenda = LocalDate.now();
         this.cliente = cliente;
-        this.itens = new ArrayList<>(); // Inicializa a lista vazia
+        this.itens = new ArrayList<>();
     }
 
     public void adcionarItem(Produto produto, int quantidade){

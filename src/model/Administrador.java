@@ -10,4 +10,7 @@ public class Administrador extends Usuario {
     public Administrador(int id, String nome, String sobrenome, LocalDate dataNascimento, String senha, String CPF) {
         super(id, nome, sobrenome, dataNascimento, senha, CPF);
     }
+
+    public Administrador() {
+    }
 }

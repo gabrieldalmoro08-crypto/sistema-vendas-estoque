@@ -31,7 +31,7 @@ public class ClienteDAO {
         }
     }
 
-    public void excluirCliente(int id){
+    public void excluirCliente1(int id){
 
         String sql = "DELETE FROM cliente WHERE id = ?";
 
@@ -39,7 +39,7 @@ public class ClienteDAO {
             PreparedStatement stmt = conn.prepareStatement(sql)){
 
             stmt.setInt(1, id);
-    
+
             int linhasAfetadas = stmt.executeUpdate();
 
             if (linhasAfetadas > 0){

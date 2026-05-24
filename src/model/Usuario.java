@@ -21,6 +21,9 @@ public abstract class Usuario {
         this.CPF = CPF;
     }
 
+    public Usuario() {
+    }
+
     public boolean verificarMaioridade(int idadeMinima) {
         if (this.dataNascimento == null)
             return false;
