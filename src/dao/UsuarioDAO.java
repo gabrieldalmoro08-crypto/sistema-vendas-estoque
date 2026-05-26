@@ -41,24 +41,24 @@ public class UsuarioDAO {
         }
     }
 
-    public void excluirUsuario(int id){
+    public void excluirUsuario(int id) {
 
         String sql = "DELETE FROM usuario WHERE id = ?";
 
-        try(Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
 
             int linhasAfetadas = stmt.executeUpdate();
 
-            if (linhasAfetadas > 0){
+            if (linhasAfetadas > 0) {
                 System.out.println("Sucesso: Cliente ou Administrador deletado!");
-            } else{
+            } else {
                 System.out.println("Aviso: Nenhum cliente ou admnistrador encontrado com o ID " + id);
             }
 
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erro crítico ao deletar no banco: " + e.getMessage(), e);
         }
     }
@@ -73,13 +73,13 @@ public class UsuarioDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()){
+            while (rs.next()) {
 
                 Usuario usuario;
 
                 String tipo = rs.getString("Tipo");
 
-                if("ADMINISTRADOR".equals(tipo)){
+                if ("ADMINISTRADOR".equals(tipo)) {
                     usuario = new Administrador();
                 } else {
                     usuario = new Cliente();
@@ -89,7 +89,7 @@ public class UsuarioDAO {
                 usuario.setNome(rs.getString("nome"));
                 usuario.setSobrenome(rs.getString("sobrenome"));
 
-                if(rs.getDate("data_nascimento") != null){
+                if (rs.getDate("data_nascimento") != null) {
                     usuario.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
                 }
 
@@ -111,15 +111,15 @@ public class UsuarioDAO {
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1,id);
+            stmt.setInt(1, id);
 
-            try (ResultSet rs = stmt.executeQuery()){
+            try (ResultSet rs = stmt.executeQuery()) {
 
-                if(rs.next()){
+                if (rs.next()) {
 
                     String tipo = rs.getString("Tipo");
 
-                    if("ADMINISTRADOR".equals(tipo)){
+                    if ("ADMINISTRADOR".equals(tipo)) {
                         usuarioEncontrado = new Administrador();
                     } else {
                         usuarioEncontrado = new Cliente();
@@ -128,7 +128,7 @@ public class UsuarioDAO {
                     usuarioEncontrado.setNome(rs.getString("nome"));
                     usuarioEncontrado.setSobrenome(rs.getString("sobrenome"));
 
-                    if(rs.getDate("data_nascimento") != null){
+                    if (rs.getDate("data_nascimento") != null) {
                         usuarioEncontrado.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
                     }
                 }
@@ -138,5 +138,34 @@ public class UsuarioDAO {
             throw new RuntimeException("Erro crítico ao buscar o id do usuario: " + e.getMessage(), e);
         }
         return usuarioEncontrado;
+    }
+
+    public void atualizarCadastro(Usuario usuario) {
+
+        String sql = "UPDATE usuario SET nome = ?, sobrenome = ?, data_nascimento = ?, cpf = ?, tipo = ?, WHERE id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1,usuario.getNome());
+            stmt.setString(2, usuario.getSobrenome());
+            stmt.setDate(3, Date.valueOf(usuario.getDataNascimento()));
+            stmt.setString(4, usuario.getSenha());
+            stmt.setString(5, usuario.getCPF());
+
+            if(usuario instanceof Administrador){
+                stmt.setString(6, "ADMINISTRADOR");
+            } else if (usuario instanceof Cliente){
+                stmt.setString(6, "CLIENTE");
+            }
+
+            stmt.setInt(7, usuario.getId());
+            stmt.executeUpdate();
+
+            System.out.println("Sucesso: Usuário " + usuario.getNome() + " foi atualizado no banco de dados!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro crítico ao atualizar o usuário no banco: " + e.getMessage(), e);
+        }
     }
 }

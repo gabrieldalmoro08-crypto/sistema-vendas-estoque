@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Venda {
+
+    private int id;
     private LocalDate dataVenda;
     private Cliente cliente;
     private List<ItemVenda> itens;
@@ -15,9 +17,20 @@ public class Venda {
         this.itens = new ArrayList<>();
     }
 
+    public Venda() {
+    }
+
     public void adcionarItem(Produto produto, int quantidade){
         ItemVenda itemVenda = new ItemVenda(produto, quantidade);
         this.itens.add(itemVenda);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalDate getDataVenda() {

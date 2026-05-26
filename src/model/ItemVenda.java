@@ -2,6 +2,7 @@ package model;
 
 public class ItemVenda {
 
+    private int id;
     private Produto produto;
     private int quantidade;
     private double precoUnitario;
@@ -10,6 +11,9 @@ public class ItemVenda {
         this.produto = produto;
         this.quantidade = quantidade;
         this.precoUnitario = produto.getPreco();
+    }
+
+    public ItemVenda() {
     }
 
     public double subTotal(){
@@ -38,5 +42,13 @@ public class ItemVenda {
 
     public void setPrecoUnitario(double precoUnitario) {
         this.precoUnitario = precoUnitario;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
