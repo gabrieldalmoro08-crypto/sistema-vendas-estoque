@@ -24,5 +24,5 @@ O Sistema de Vendas e Estoque é uma aplicação desenvolvida com o objetivo de 
 - [ ] Sistema de Autenticação e Autorização (Controle de acesso para Administradores vs Clientes).
 
 ## 👨‍💻 Desenvolvedor
-**Gabriel**
-[Coloque o link do seu LinkedIn aqui]
+Gabriel - 
+LinkedIn: linkedin.com/in/gabriel-henrique-dalmoro
