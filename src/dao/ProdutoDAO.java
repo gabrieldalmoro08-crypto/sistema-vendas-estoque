@@ -134,4 +134,30 @@ public class ProdutoDAO {
         }
         return produtoEncontrado;
     }
+
+    public boolean verificarSeProdutoTemVenda(int idProduto) {
+        String sql = "SELECT COUNT(*) FROM item_venda WHERE produto_id = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idProduto);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    int quantidadeDeVendas = rs.getInt(1);
+
+                    if (quantidadeDeVendas > 0) {
+                        return true;
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar histórico de vendas do produto: " + e.getMessage());
+            throw new RuntimeException("Erro interno no banco de dados.");
+        }
+
+        return false;
+    }
 }
