@@ -3,6 +3,8 @@ package service;
 import dao.*;
 import model.*;
 
+import java.util.List;
+
 public class VendaService {
 
     private VendaDAO vendaDAO;
@@ -23,6 +25,8 @@ public class VendaService {
             throw new IllegalArgumentException("Erro: A venda deve possuir ao menos um produto!");
         }
 
+        double totalVenda = 0.0;
+
         for(ItemVenda item : venda.getItens()){
 
             Produto produtoDaTela = item.getProduto();
@@ -38,12 +42,16 @@ public class VendaService {
                 throw new IllegalArgumentException("Erro: Estoque insuficiente para o produto: " + produtoDoBanco.getDescricao());
             }
 
+            item.setPrecoUnitario(produtoDoBanco.getPreco());
+            totalVenda += item.getPrecoUnitario() * qtdComprada;
+
             int novoEstoque = produtoDoBanco.getQtde() - qtdComprada;
             produtoDoBanco.setQtde(novoEstoque);
 
             produtoDAO.atualizarProduto(produtoDoBanco);
 
         }
+        venda.setValorTotal(totalVenda);
 
         vendaDAO.cadastrar(venda);
     }
@@ -76,5 +84,24 @@ public class VendaService {
         }
 
         vendaDAO.excluirVenda(venda.getId());
+    }
+
+    public Venda buscarVendaId(int id){
+
+        if(id <= 0){
+            throw new IllegalArgumentException("Erro: O ID da venda deve ser um número maior que zero!");
+        }
+
+        Venda vendaBanco = vendaDAO.buscarVendaPorId(id);
+
+        if(vendaBanco == null){
+            throw new IllegalArgumentException("Erro: Venda não encontrada no banco de dados!");
+        }
+
+      return vendaBanco;
+    }
+
+    public List<Venda> listarTodasVendas(){
+        return vendaDAO.listarVendas();
     }
 }

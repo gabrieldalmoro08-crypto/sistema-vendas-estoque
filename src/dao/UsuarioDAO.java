@@ -85,7 +85,7 @@ public class UsuarioDAO {
                     usuario = new Cliente();
                 }
 
-                usuario.setId(rs.getInt("is"));
+                usuario.setId(rs.getInt("id"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setSobrenome(rs.getString("sobrenome"));
 
@@ -125,6 +125,7 @@ public class UsuarioDAO {
                         usuarioEncontrado = new Cliente();
                     }
 
+                    usuarioEncontrado.setId(rs.getInt("id"));
                     usuarioEncontrado.setNome(rs.getString("nome"));
                     usuarioEncontrado.setSobrenome(rs.getString("sobrenome"));
 
@@ -142,7 +143,7 @@ public class UsuarioDAO {
 
     public void atualizarCadastro(Usuario usuario) {
 
-        String sql = "UPDATE usuario SET nome = ?, sobrenome = ?, data_nascimento = ?, cpf = ?, tipo = ?, WHERE id = ?";
+        String sql = "UPDATE usuario SET nome = ?, sobrenome = ?, data_nascimento = ?, senha = ?, cpf = ?, tipo = ? WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -168,4 +169,25 @@ public class UsuarioDAO {
             throw new RuntimeException("Erro crítico ao atualizar o usuário no banco: " + e.getMessage(), e);
         }
     }
+
+    public boolean buscaUsuarioPorCPF(String cpf){
+
+        String sql = "SELECT * FROM usuario WHERE cpf = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1,cpf);
+
+            try(ResultSet rs = stmt.executeQuery()){
+
+                if(rs.next()){
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro crítico ao verificar CPF no banco: " + e.getMessage(), e);
+        } return false;
+    }
+
 }

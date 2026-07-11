@@ -11,15 +11,16 @@ public class VendaDAO {
 
     public void cadastrar(Venda venda) {
 
-        String sqlVenda = "INSERT INTO venda (data_venda, id_cliente) VALUES (?, ?)";
+        String sqlVenda = "INSERT INTO venda (data_venda, valor_total, cliente_id) VALUES (?, ?, ?)";
 
-        String sqlItem = "INSERT INTO item_venda (id_venda, id_produto, quantidade) VALUES (?, ?, ?)";
+        String sqlItem = "INSERT INTO item_venda (id_venda, id_produto, quantidade, preco_congelado) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmtVenda = conn.prepareStatement(sqlVenda, Statement.RETURN_GENERATED_KEYS)) {
 
             stmtVenda.setDate(1, java.sql.Date.valueOf(venda.getDataVenda()));
-            stmtVenda.setInt(2, venda.getCliente().getId());
+            stmtVenda.setDouble(2, venda.getValorTotal());
+            stmtVenda.setInt(3, venda.getCliente().getId());
 
             stmtVenda.executeUpdate();
 
@@ -39,6 +40,7 @@ public class VendaDAO {
                     stmtItem.setInt(1, idVendaGerado);
                     stmtItem.setInt(2, item.getProduto().getId());
                     stmtItem.setInt(3, item.getQuantidade());
+                    stmtItem.setDouble(4, item.getPrecoUnitario());
 
                     stmtItem.executeUpdate();
                 }
@@ -92,6 +94,7 @@ public class VendaDAO {
 
                 venda.setId(rsVenda.getInt("id"));
                 venda.setDataVenda(rsVenda.getDate("data_venda").toLocalDate());
+                venda.setValorTotal(rsVenda.getDouble("valor_total"));
 
                 Cliente cliente =  new Cliente();
                 cliente.setId(rsVenda.getInt("cliente_id"));
@@ -123,7 +126,7 @@ public class VendaDAO {
                     ItemVenda item = new ItemVenda();
 
                     item.setQuantidade(rsItens.getInt("quantidade"));
-                    item.setPrecoUnitario(rsItens.getDouble("preco_unitario"));
+                    item.setPrecoUnitario(rsItens.getDouble("preco_congelado"));
 
                     Produto produto = new Produto();
                     produto.setId(rsItens.getInt("produto_id"));
@@ -151,6 +154,7 @@ public class VendaDAO {
                 venda = new Venda();
                 venda.setId(rs.getInt("id"));
                 venda.setDataVenda(rs.getDate("data_venda").toLocalDate());
+                venda.setValorTotal(rs.getDouble("valor_total"));
 
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("cliente_id"));

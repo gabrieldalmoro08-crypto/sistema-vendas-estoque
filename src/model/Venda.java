@@ -10,6 +10,7 @@ public class Venda {
     private LocalDate dataVenda;
     private Cliente cliente;
     private List<ItemVenda> itens;
+    private double valorTotal;
 
     public Venda(Cliente cliente) {
         this.dataVenda = LocalDate.now();
@@ -55,5 +56,13 @@ public class Venda {
 
     public void setItens(List<ItemVenda> itens) {
         this.itens = itens;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 }
