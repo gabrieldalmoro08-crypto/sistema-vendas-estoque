@@ -53,7 +53,7 @@ public class VendaDAO {
 
     public void excluirVenda(int id) {
 
-        String sqlItens = "DELETE FROM item_venda WHARE venda_id = ?";
+        String sqlItens = "DELETE FROM item_venda WHERE venda_id = ?";
         String sqlVenda = "DELETE FROM venda WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -117,7 +117,9 @@ public class VendaDAO {
         try (PreparedStatement stmtItens = conn.prepareStatement(sqlItens)) {
             stmtItens.setInt(1, idVenda);
 
-                try(ResultSet rsItens = stmtItens.executeQuery()){
+            try(ResultSet rsItens = stmtItens.executeQuery()){
+
+                while (rsItens.next()) {
                     ItemVenda item = new ItemVenda();
 
                     item.setQuantidade(rsItens.getInt("quantidade"));
@@ -128,9 +130,38 @@ public class VendaDAO {
                     item.setProduto(produto);
 
                     listaItens.add(item);
-
                 }
+            }
         }
         return listaItens;
+    }
+
+    public Venda buscarVendaPorId(int id){
+        Venda venda = null;
+        String sql = "SELECT * FROM venda WHERE id = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)){
+
+        stmt.setInt(1, id);
+
+        try(ResultSet rs = stmt.executeQuery()){
+
+            if(rs.next()) {
+                venda = new Venda();
+                venda.setId(rs.getInt("id"));
+                venda.setDataVenda(rs.getDate("data_venda").toLocalDate());
+
+                Cliente cliente = new Cliente();
+                cliente.setId(rs.getInt("cliente_id"));
+                venda.setCliente(cliente);
+
+                List<ItemVenda> itens = buscarItensPorVenda(venda.getId(), conn);
+                venda.setItens(itens);
+            }
+           }
+        } catch (SQLException e){
+            throw new RuntimeException("Erro crítico ao buscar venda por ID: " + e.getMessage(), e);
+        } return venda;
     }
 }
