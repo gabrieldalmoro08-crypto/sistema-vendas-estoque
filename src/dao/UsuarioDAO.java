@@ -66,7 +66,6 @@ public class UsuarioDAO {
     public List<Usuario> listarUsuarios() {
 
         List<Usuario> listarUsuarios = new ArrayList<>();
-
         String sql = "SELECT * FROM usuario";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -76,7 +75,6 @@ public class UsuarioDAO {
             while (rs.next()) {
 
                 Usuario usuario;
-
                 String tipo = rs.getString("Tipo");
 
                 if ("ADMINISTRADOR".equals(tipo)) {
@@ -88,6 +86,10 @@ public class UsuarioDAO {
                 usuario.setId(rs.getInt("id"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setSobrenome(rs.getString("sobrenome"));
+
+                // <<< A MÁGICA ACONTECE AQUI TAMBÉM: Para a lista não vir sem CPF e Senha!
+                usuario.setCPF(rs.getString("cpf"));
+                usuario.setSenha(rs.getString("senha"));
 
                 if (rs.getDate("data_nascimento") != null) {
                     usuario.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
@@ -105,7 +107,6 @@ public class UsuarioDAO {
     public Usuario buscarUsuarioPorId(int id) {
 
         Usuario usuarioEncontrado = null;
-
         String sql = "SELECT * FROM usuario WHERE id = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -128,6 +129,10 @@ public class UsuarioDAO {
                     usuarioEncontrado.setId(rs.getInt("id"));
                     usuarioEncontrado.setNome(rs.getString("nome"));
                     usuarioEncontrado.setSobrenome(rs.getString("sobrenome"));
+
+                    // <<< A MÁGICA ACONTECE AQUI: Pegando o CPF e a Senha do banco!
+                    usuarioEncontrado.setCPF(rs.getString("cpf"));
+                    usuarioEncontrado.setSenha(rs.getString("senha"));
 
                     if (rs.getDate("data_nascimento") != null) {
                         usuarioEncontrado.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
@@ -188,6 +193,43 @@ public class UsuarioDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro crítico ao verificar CPF no banco: " + e.getMessage(), e);
         } return false;
+    }
+
+    public Usuario buscarUsuarioCompletoPorCPF(String cpf){
+
+        Usuario usuarioEncontrado = null;
+        String sql = "SELECT * FROM usuario WHERE cpf = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, cpf);
+
+            try(ResultSet rs = stmt.executeQuery()){
+
+                if(rs.next()){
+
+                    String tipo = rs.getString("Tipo");
+
+                    if("ADMINISTRADOR".equals(tipo)){
+                        usuarioEncontrado = new Administrador();
+                    } else {
+                        usuarioEncontrado = new Cliente();
+                    }
+
+                    usuarioEncontrado.setId(rs.getInt("id"));
+                    usuarioEncontrado.setNome(rs.getString("nome"));
+                    usuarioEncontrado.setSobrenome(rs.getString("sobrenome"));
+                    usuarioEncontrado.setCPF(rs.getString("cpf"));
+                    usuarioEncontrado.setSenha(rs.getString("senha"));
+
+                    if(rs.getDate("data_nascimento") != null){
+                        usuarioEncontrado.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());                    }
+                }
+            }
+        } catch (SQLException e){
+            throw new RuntimeException("Erro crítico ao buscar o usuário por CPF: " + e.getMessage(), e);
+        } return usuarioEncontrado;
     }
 
 }
