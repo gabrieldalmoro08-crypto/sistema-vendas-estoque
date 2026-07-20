@@ -34,7 +34,6 @@ public class UsuarioDAO {
             }
 
             stmt.executeUpdate();
-            System.out.println("Sucesso: Usuário " + usuario.getNome() + " foi salvo no banco de dados!");
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro crítico ao salvar o usuário no banco: " + e.getMessage(), e);
@@ -50,13 +49,7 @@ public class UsuarioDAO {
 
             stmt.setInt(1, id);
 
-            int linhasAfetadas = stmt.executeUpdate();
-
-            if (linhasAfetadas > 0) {
-                System.out.println("Sucesso: Cliente ou Administrador deletado!");
-            } else {
-                System.out.println("Aviso: Nenhum cliente ou admnistrador encontrado com o ID " + id);
-            }
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro crítico ao deletar no banco: " + e.getMessage(), e);
@@ -167,8 +160,6 @@ public class UsuarioDAO {
 
             stmt.setInt(7, usuario.getId());
             stmt.executeUpdate();
-
-            System.out.println("Sucesso: Usuário " + usuario.getNome() + " foi atualizado no banco de dados!");
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro crítico ao atualizar o usuário no banco: " + e.getMessage(), e);
