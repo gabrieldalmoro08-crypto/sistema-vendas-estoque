@@ -25,13 +25,13 @@ public class ProdutoView {
     }
 
     private void preencherDados(Produto produto){
-        System.out.print("Insira a descrição(nome) do produto: "); // Ajustado para print
+        System.out.print("Insira a descrição(nome) do produto: ");
         produto.setDescricao(entrada.nextLine());
 
         System.out.print("Insira o preço: "); // Ajustado para print
         produto.setPreco(Double.parseDouble(entrada.nextLine()));
 
-        System.out.print("Insira a quantidade: "); // Ajustado para print
+        System.out.print("Insira a quantidade: ");
         produto.setQtde(Integer.parseInt(entrada.nextLine()));
     }
 

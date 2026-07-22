@@ -15,30 +15,32 @@ public class VendaService {
         this.produtoDAO = produtoDAO;
     }
 
-    public void realizarVenda(Venda venda){
+    public void realizarVenda(Venda venda) {
 
-        if(venda == null || venda.getCliente() == null ||venda.getCliente().getId() <= 0){
+        if (venda == null || venda.getCliente() == null || venda.getCliente().getId() <= 0) {
             throw new IllegalArgumentException("Erro: Cliente não localizado!");
         }
 
-        if(venda.getItens() == null || venda.getItens().isEmpty()){
+        if (venda.getItens() == null || venda.getItens().isEmpty()) {
             throw new IllegalArgumentException("Erro: A venda deve possuir ao menos um produto!");
         }
 
+        venda.setDataVenda(java.time.LocalDate.now());
+
         double totalVenda = 0.0;
 
-        for(ItemVenda item : venda.getItens()){
+        for (ItemVenda item : venda.getItens()) {
 
             Produto produtoDaTela = item.getProduto();
             int qtdComprada = item.getQuantidade();
 
             Produto produtoDoBanco = produtoDAO.buscarProdutoPorId(produtoDaTela.getId());
 
-            if(produtoDoBanco == null){
+            if (produtoDoBanco == null) {
                 throw new IllegalArgumentException("Erro: Produto não encontrado!");
             }
 
-            if(produtoDoBanco.getQtde() < qtdComprada){
+            if (produtoDoBanco.getQtde() < qtdComprada) {
                 throw new IllegalArgumentException("Erro: Estoque insuficiente para o produto: " + produtoDoBanco.getDescricao());
             }
 
@@ -49,10 +51,9 @@ public class VendaService {
             produtoDoBanco.setQtde(novoEstoque);
 
             produtoDAO.atualizarProduto(produtoDoBanco);
-
         }
-        venda.setValorTotal(totalVenda);
 
+        venda.setValorTotal(totalVenda);
         vendaDAO.cadastrar(venda);
     }
 
