@@ -7,29 +7,23 @@ import service.UsuarioService;
 import view.UsuarioView;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class UsuarioController {
 
     private UsuarioView usuarioView;
     private UsuarioService usuarioService;
     private AutenticacaoService authService;
-    private Scanner entrada;
 
     public UsuarioController(UsuarioView usuarioView, UsuarioService usuarioService, AutenticacaoService authService) {
         this.usuarioView = usuarioView;
         this.usuarioService = usuarioService;
         this.authService = authService;
-        this.entrada = new Scanner(System.in);
     }
 
     public Usuario realizarLogin() {
-        System.out.print("\n--- TELA DE LOGIN ---");
-        System.out.print("\nDigite seu CPF: ");
-        String cpf = entrada.nextLine();
-
-        System.out.print("Digite sua Senha: ");
-        String senha = entrada.nextLine();
+        String[] dadosLogin = usuarioView.pedirDadosLogin();
+        String cpf = dadosLogin[0];
+        String senha = dadosLogin[1];
 
         try {
             return authService.fazerLogin(cpf, senha);
@@ -75,8 +69,7 @@ public class UsuarioController {
 
     private void cadastrarUsuario() {
         try {
-            System.out.print("\nQual perfil deseja cadastrar? (1 - Cliente | 2 - Administrador): ");
-            int perfil = Integer.parseInt(entrada.nextLine());
+            int perfil = usuarioView.pedirPerfilCadastro();
 
             Usuario novoUsuario;
             if (perfil == 1) {
@@ -88,7 +81,7 @@ public class UsuarioController {
                 return;
             }
 
-            usuarioService.cadastrarUsuario(novoUsuario); // Manda pro Service salvar
+            usuarioService.cadastrarUsuario(novoUsuario);
             usuarioView.exibirMensagem("Usuário cadastrado com sucesso!");
 
         } catch (IllegalArgumentException e) {

@@ -1,7 +1,6 @@
 package service;
 
 import model.*;
-import service.*;
 import dao.*;
 import controller.*;
 
@@ -21,6 +20,11 @@ public class ProdutoService {
 
         if(produto.getQtde() <= 0){
             throw new IllegalArgumentException("Erro: A quantidade inicial em estoque não pode ser negativa!");
+        }
+
+        Produto produtoExistente = produtoDAO.buscarPorDescricao(produto.getDescricao());
+        if (produtoExistente != null) {
+            throw new IllegalArgumentException("Erro: Já existe um produto cadastrado com a descrição '" + produto.getDescricao() + "'!");
         }
 
         produtoDAO.cadastrarProduto(produto);
@@ -81,6 +85,14 @@ public class ProdutoService {
 
     public List<Produto> listarProdutos(){
         return produtoDAO.listarTodosProdutos();
+    }
+
+    public List<Produto> pesquisarPorDescricao(String termo) {
+        if (termo == null || termo.trim().isEmpty()) {
+            throw new IllegalArgumentException("Erro: O termo de pesquisa não pode estar vazio!");
+        }
+
+        return produtoDAO.pesquisarPorParteDaDescricao(termo);
     }
 
 }

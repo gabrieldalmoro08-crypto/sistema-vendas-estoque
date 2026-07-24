@@ -130,4 +130,20 @@ public class UsuarioView {
         String resposta = entrada.nextLine();
         return resposta.equalsIgnoreCase("S");
     }
+
+    public String[] pedirDadosLogin() {
+        System.out.println("\n--- TELA DE LOGIN ---");
+        System.out.print("Digite seu CPF: ");
+        String cpf = entrada.nextLine();
+
+        System.out.print("Digite sua Senha: ");
+        String senha = entrada.nextLine();
+
+        return new String[]{cpf, senha};
+    }
+
+    public int pedirPerfilCadastro() {
+        System.out.print("\nQual perfil deseja cadastrar? (1 - Cliente | 2 - Administrador): ");
+        return Integer.parseInt(entrada.nextLine());
+    }
 }

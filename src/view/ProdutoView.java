@@ -91,4 +91,16 @@ public class ProdutoView {
         return resposta.equalsIgnoreCase("S");
     }
 
+    public String pedirTexto(String mensagem) {
+        System.out.print(mensagem);
+
+        String texto = entrada.nextLine();
+
+        if (texto.trim().isEmpty()) {
+            texto = entrada.nextLine();
+        }
+
+        return texto;
+    }
+
 }

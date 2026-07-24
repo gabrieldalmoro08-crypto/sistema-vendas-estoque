@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,7 +24,6 @@ public class ProdutoDAO {
             stmt.setString(3, produto.getDescricao());
 
             stmt.execute();
-            System.out.println("Sucesso: Produto " + produto.getDescricao() + " foi salvo no banco de dados!");
 
         } catch(SQLException e) {
             throw new RuntimeException("Erro crítico ao salvar o produto no banco: " + e.getMessage(), e);
@@ -37,17 +35,10 @@ public class ProdutoDAO {
         String sql = "DELETE FROM produto WHERE id = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)){
+            PreparedStatement stmt = conn.prepareStatement(sql)){
 
-        stmt.setInt(1, id);
-
-        int linhasAfetadas = stmt.executeUpdate();
-
-        if (linhasAfetadas > 0){
-            System.out.println("Sucesso: Produto deletado!");
-        } else{
-            System.out.println("Aviso: Nenhum produto encontrado com o ID " + id);
-        }
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
 
         }catch(SQLException e) {
             throw new RuntimeException("Erro crítico ao deletar o produto no banco: " + e.getMessage(), e);
@@ -66,13 +57,7 @@ public class ProdutoDAO {
             stmt.setString(3, produto.getDescricao());
             stmt.setInt(4, produto.getId());
 
-            int linhaAfetada = stmt.executeUpdate();
-
-            if (linhaAfetada > 0) {
-                System.out.println("Sucesso: Produto atualizado com sucesso!");
-            } else {
-                System.out.println("Aviso: Nenhum produto encontrado com o ID " + produto.getId());
-            }
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro crítico ao atualizar o produto no banco: " + e.getMessage(), e);
@@ -154,10 +139,62 @@ public class ProdutoDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao verificar histórico de vendas do produto: " + e.getMessage());
-            throw new RuntimeException("Erro interno no banco de dados.");
+            throw new RuntimeException("Erro interno no banco de dados ao verificar histórico: " + e.getMessage(), e);
         }
 
         return false;
+    }
+
+    public Produto buscarPorDescricao(String descricao) {
+        String sql = "SELECT * FROM produto WHERE LOWER(descricao) = LOWER(?)";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, descricao.trim());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Produto produto = new Produto();
+                    produto.setId(rs.getInt("id"));
+                    produto.setPreco(rs.getDouble("preco"));
+                    produto.setQtde(rs.getInt("qtde"));
+                    produto.setDescricao(rs.getString("descricao"));
+
+                    return produto;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar produto por descrição: " + e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    public List<Produto> pesquisarPorParteDaDescricao(String termo) {
+        List<Produto> listaResultados = new ArrayList<>();
+
+        String sql = "SELECT * FROM produto WHERE LOWER(descricao) LIKE LOWER(?)";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "%" + termo.trim() + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Produto produto = new Produto();
+                    produto.setId(rs.getInt("id"));
+                    produto.setPreco(rs.getDouble("preco"));
+                    produto.setQtde(rs.getInt("qtde"));
+                    produto.setDescricao(rs.getString("descricao"));
+
+                    listaResultados.add(produto);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro crítico ao pesquisar produtos: " + e.getMessage(), e);
+        }
+        return listaResultados;
     }
 }
