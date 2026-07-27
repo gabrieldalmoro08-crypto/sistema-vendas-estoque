@@ -5,30 +5,37 @@ import model.Usuario;
 import service.AutenticacaoService;
 import service.UsuarioService;
 import view.UsuarioView;
+import view.LoginView; // <-- Adicionado o import da LoginView
 
 import java.util.List;
 
 public class UsuarioController {
 
     private UsuarioView usuarioView;
+    private LoginView loginView; // <-- Agora a LoginView pertence a quem cuida de Usuários!
     private UsuarioService usuarioService;
     private AutenticacaoService authService;
 
-    public UsuarioController(UsuarioView usuarioView, UsuarioService usuarioService, AutenticacaoService authService) {
+    public UsuarioController(UsuarioView usuarioView, LoginView loginView, UsuarioService usuarioService, AutenticacaoService authService) {
         this.usuarioView = usuarioView;
+        this.loginView = loginView;
         this.usuarioService = usuarioService;
         this.authService = authService;
     }
 
     public Usuario realizarLogin() {
-        String[] dadosLogin = usuarioView.pedirDadosLogin();
-        String cpf = dadosLogin[0];
-        String senha = dadosLogin[1];
+        loginView.exibirCabecalho();
 
         try {
-            return authService.fazerLogin(cpf, senha);
+            String cpf = loginView.pedirCpf();
+            String senha = loginView.pedirSenha();
+
+            Usuario usuario = authService.fazerLogin(cpf, senha);
+            loginView.exibirMensagem("\n[SUCESSO] Bem-vindo(a), " + usuario.getNome() + "!");
+            return usuario;
+
         } catch (IllegalArgumentException e) {
-            usuarioView.exibirMensagem("Falha no login: " + e.getMessage());
+            loginView.exibirMensagem("\n[ERRO] " + e.getMessage());
             return null;
         }
     }
@@ -67,7 +74,7 @@ public class UsuarioController {
         }
     }
 
-    private void cadastrarUsuario() {
+    public void cadastrarUsuario() {
         try {
             int perfil = usuarioView.pedirPerfilCadastro();
 

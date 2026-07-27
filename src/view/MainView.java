@@ -40,4 +40,8 @@ public class MainView {
         System.out.print("Escolha uma opção: ");
         return Integer.parseInt(entrada.nextLine());
     }
+
+    public void exibirMensagem(String mensagem) {
+        System.out.println(mensagem);
+    }
 }

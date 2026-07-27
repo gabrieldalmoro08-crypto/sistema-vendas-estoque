@@ -1,6 +1,5 @@
 package dao;
 
-import model.Produto;
 import model.Usuario;
 import model.Cliente;
 import model.Administrador;
